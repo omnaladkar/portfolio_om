@@ -203,9 +203,12 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--bg-color);
+  background: yellowgreen;
   padding: 13px 10%;
+  backdrop-filter: blur(8px); /* Adjust the blur value as needed */
+  opacity: 0.9; /* Adjust the opacity for the blur effect */
 }
+
 .logo {
   font-size: 1.61rem;
   font-weight: 600;
