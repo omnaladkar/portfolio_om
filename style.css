@@ -257,9 +257,7 @@ header {
   transition: transform .7s ease-in-out;
 }
 
- .home-img:hover {
-    transform: rotate(360deg);
-  }
+
 .home-img img {
   width: 50%;
 }
