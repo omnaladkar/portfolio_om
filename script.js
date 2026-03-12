@@ -1,28 +1,54 @@
-let header = document.querySelector("header");
-let menu = document.querySelector("#menu-icon");
-let navbar = document.querySelector(".navbar");
-let section = document.getElementsByTagName("section");
-let hexagon = document.getElementsByClassName("hexagon");
+document.addEventListener('DOMContentLoaded', () => {
+  const menuIcon = document.getElementById('menu-icon');
+  const navbar = document.querySelector('.navbar');
+  
+  menuIcon.addEventListener('click', () => {
+    navbar.classList.toggle('active');
+    
+    if (navbar.classList.contains('active')) {
+      menuIcon.classList.remove('bx-menu');
+      menuIcon.classList.add('bx-x');
+    } else {
+      menuIcon.classList.remove('bx-x');
+      menuIcon.classList.add('bx-menu');
+    }
+  });
 
-let darkmode = document.querySelector("#darkmode");
-darkmode.onclick = () => {
-  if (darkmode.classList.contains("bx-moon")) {
-    darkmode.classList.replace("bx-moon", "bx-sun");
-    document.body.classList.add("active");
-    for (let item of section) {
-      item.classList.add("active");
-    }
-    for (let item of hexagon) {
-      item.classList.add("active");
-    }
-  } else {
-    darkmode.classList.replace("bx-sun", "bx-moon");
-    document.body.classList.remove("active");
-    for (let item of section) {
-      item.classList.remove("active");
-    }
-    for (let item of hexagon) {
-      item.classList.remove("active");
-    }
-  }
-};
+  document.querySelectorAll('.navbar a').forEach(link => {
+    link.addEventListener('click', () => {
+      navbar.classList.remove('active');
+      menuIcon.classList.remove('bx-x');
+      menuIcon.classList.add('bx-menu');
+    });
+  });
+
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.animationPlayState = 'running';
+      }
+    });
+  }, observerOptions);
+
+  document.querySelectorAll('.timeline-block, .card, .card_b').forEach(el => {
+    observer.observe(el);
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+});
