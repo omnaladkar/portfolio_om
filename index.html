@@ -22,6 +22,19 @@
     <div class="dot dot-3"></div>
     <div class="dot dot-4"></div>
 
+    <!-- Custom Cursor -->
+    <div class="cursor">
+        <div class="cursor-dot"></div>
+        <div class="cursor-ring"></div>
+    </div>
+
+    <!-- Floating Visitor Counter -->
+    <div class="floating-counter">
+        <div class="counter-dot"></div>
+        <span class="floating-counter-value" id="visitor-count-side">678</span>
+        <span class="floating-counter-label">visits</span>
+    </div>
+
     <header>
         <a href="#home" class="logo">Om.</a>
         <div class="bx bx-menu" id="menu-icon"></div>
@@ -326,8 +339,58 @@
 
     <footer class="footer">
         <p>Designed & Built by <a href="https://github.com/omnaladkar">Om Naladkar</a></p>
+        <div class="visitor-counter">
+            <span class="counter-label">Visitors</span>
+            <span class="counter-value" id="visitor-count">678</span>
+        </div>
     </footer>
 
     <script src="./script.js"></script>
+    <script>
+        // Visitor Counter
+        (async function() {
+            const key = 'omnaladkar-portfolio';
+            try {
+                const res = await fetch(`https://api.countapi.xyz/get/${key}`);
+                const data = await res.json();
+                document.getElementById('visitor-count').textContent = data.value;
+                document.getElementById('visitor-count-side').textContent = data.value;
+            } catch {
+                fetch(`https://api.countapi.xyz/create?namespace=${key}&enable_reset=0&initial=678`)
+                    .then(res => res.json())
+                    .then(data => {
+                        document.getElementById('visitor-count').textContent = data.value;
+                        document.getElementById('visitor-count-side').textContent = data.value;
+                    })
+                    .catch(() => {});
+            }
+        })();
+
+        // Custom Cursor
+        const cursor = document.querySelector('.cursor');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function animateCursor() {
+            cursorX += (mouseX - cursorX) * 0.15;
+            cursorY += (mouseY - cursorY) * 0.15;
+            cursor.style.left = cursorX + 'px';
+            cursor.style.top = cursorY + 'px';
+            requestAnimationFrame(animateCursor);
+        }
+        animateCursor();
+
+        // Hover effects
+        const hoverElements = document.querySelectorAll('a, button, .card, .card_b');
+        hoverElements.forEach(el => {
+            el.addEventListener('mouseenter', () => cursor.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => cursor.classList.remove('hovering'));
+        });
+    </script>
 </body>
 </html>
